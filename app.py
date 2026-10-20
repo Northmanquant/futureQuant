@@ -1,60 +1,7 @@
 import streamlit as st
 from datetime import datetime
 
-# ---------------- تنظیمات صفحه ----------------
-st.set_page_config(
-    page_title="futureQuant | دستیار هوشمند",
-    page_icon="🚀",
-    layout="wide"
-)
-
-# ---------------- هدر ----------------
-st.title("🚀 futureQuant")
-st.subheader("دستیار هوشمند برای برنامه‌ریزی، نوشتن و مدیریت کارهای روزمره")
-st.divider()
-
-# ذخیره تاریخچه گفتگو
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-# نمایش تاریخچه
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
-
-# منوی کناری
-with st.sidebar:
-    st.header("⚡ دسترسی سریع")
-    quick_prompt = None
-    
-    if st.button("📅 برنامه‌ریزی روز"):
-        quick_prompt = "برای من یک برنامه منظم و عملیاتی برای یک روز کامل بنویس، شامل زمان‌بندی کارها، استراحت و مطالعه."
-    elif st.button("✍️ نوشتن متن"):
-        quick_prompt = "یک الگوی آماده برای نوشتن نامه یا پیام رسمی برایم بنویس."
-    elif st.button("📝 خلاصه‌سازی متن"):
-        quick_prompt = "من یک متن می‌دهم، لطفاً آن را خلاصه کن و نکات کلیدی را جدا کن."
-    elif st.button("🛒 لیست خرید"):
-        quick_prompt = "یک لیست خرید کامل و دسته‌بندی شده برای یک هفته برایم تهیه کن."
-    elif st.button("🎯 برنامه‌ریزی اهداف"):
-        quick_prompt = "راهنمایی کن که اهداف سالانه را چگونه بنویسم و به گام‌های کوچیک روزمره تقسیم کنم."
-
-# دریافت ورودی از کاربر
-user_input = st.chat_input("پیام خود را بنویسید...")
-prompt = user_input or quick_prompt
-
-if prompt:
-    # نمایش پیام کاربر
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
-
-    # پاسخ دستیار
-    with st.chat_message("assistant"):
-        with st.spinner("در حال پردازش..."):
-            response = generate_reply(prompt)
-            st.markdown(response)
-            st.session_state.messages.append({"role": "assistant", "content": response})
-
+# ---------------- تابع پاسخ‌دهی (باید اول بیاد) ----------------
 def generate_reply(query):
     q = query.lower()
     
@@ -148,6 +95,60 @@ def generate_reply(query):
 ✅ تعیین هدف و مسیر پیشرفت
 
 چطور می‌توانم کمکت کنم؟ 🚀"""
+
+# ---------------- تنظیمات صفحه ----------------
+st.set_page_config(
+    page_title="futureQuant | دستیار هوشمند",
+    page_icon="🚀",
+    layout="wide"
+)
+
+# ---------------- هدر ----------------
+st.title("🚀 futureQuant")
+st.subheader("دستیار هوشمند برای برنامه‌ریزی، نوشتن و مدیریت کارهای روزمره")
+st.divider()
+
+# ذخیره تاریخچه گفتگو
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# نمایش تاریخچه
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.markdown(msg["content"])
+
+# منوی کناری
+with st.sidebar:
+    st.header("⚡ دسترسی سریع")
+    quick_prompt = None
+    
+    if st.button("📅 برنامه‌ریزی روز"):
+        quick_prompt = "برای من یک برنامه منظم و عملیاتی برای یک روز کامل بنویس، شامل زمان‌بندی کارها، استراحت و مطالعه."
+    elif st.button("✍️ نوشتن متن"):
+        quick_prompt = "یک الگوی آماده برای نوشتن نامه یا پیام رسمی برایم بنویس."
+    elif st.button("📝 خلاصه‌سازی متن"):
+        quick_prompt = "من یک متن می‌دهم، لطفاً آن را خلاصه کن و نکات کلیدی را جدا کن."
+    elif st.button("🛒 لیست خرید"):
+        quick_prompt = "یک لیست خرید کامل و دسته‌بندی شده برای یک هفته برایم تهیه کن."
+    elif st.button("🎯 برنامه‌ریزی اهداف"):
+        quick_prompt = "راهنمایی کن که اهداف سالانه را چگونه بنویسم و به گام‌های کوچیک روزمره تقسیم کنم."
+
+# دریافت ورودی از کاربر
+user_input = st.chat_input("پیام خود را بنویسید...")
+prompt = user_input or quick_prompt
+
+if prompt:
+    # نمایش پیام کاربر
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    # پاسخ دستیار
+    with st.chat_message("assistant"):
+        with st.spinner("در حال پردازش..."):
+            response = generate_reply(prompt)
+            st.markdown(response)
+            st.session_state.messages.append({"role": "assistant", "content": response})
 
 st.divider()
 st.caption("futureQuant © ۲۰۲۶ | سیستم هوشمند برنامه‌ریزی و مدیریت")
