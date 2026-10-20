@@ -1,154 +1,77 @@
 import streamlit as st
-from datetime import datetime
-
-# ---------------- تابع پاسخ‌دهی (باید اول بیاد) ----------------
-def generate_reply(query):
-    q = query.lower()
-    
-    if any(word in q for word in ["برنامه", "روز", "زمان", "برنامه روزانه"]):
-        return """📅 **برنامه پیشنهادی روزمره:**
-- ۰۶:۳۰ – ۰۷:۰۰ | بیدار شدن، آب و حرکات کششی
-- ۰۷:۰۰ – ۰۸:۰۰ | صبحانه و برنامه‌ریزی روز
-- ۰۸:۰۰ – ۱۲:۰۰ | کارهای اصلی (متمرکز، بدون حواس‌پرتی)
-- ۱۲:۰۰ – ۱۳:۰۰ | ناهار و استراحت کوتاه
-- ۱۳:۰۰ – ۱۷:۰۰ | ادامه کار و پیگیری‌ها
-- ۱۷:۰۰ – ۱۸:۳۰ | ورزش، پیاده‌روی یا فعالیت بدنی
-- ۱۸:۳۰ – ۲۰:۰۰ | شام و وقت با خانواده
-- ۲۰:۰۰ – ۲۱:۳۰ | مطالعه، یادگیری یا توسعه فردی
-- ۲۱:۳۰ – ۲۲:۰۰ | مرور روز و برنامه فردا
-- ۲۲:۳۰ | استراحت کامل
-
-🔹 آیا می‌خواهی بر اساس ساعت و نیازهای خودم تنظیمش کنم؟ بگو!"""
-
-    elif any(word in q for word in ["نوشتن", "نامه", "پیام", "متن"]):
-        return """✍️ **الگوی آماده:**
-
-سلام،
-
-امیدوارم حال شما خوب باشد.
-
-[متن اصلی پیام خود را اینجا بنویسید]
-
-با سپاس،
-[نام شما]
-
-🔹 بگو برای چه کسی و در مورد چه موضوعی می‌خوای بنویسم تا کاملاً سفارشی بنویسم!"""
-
-    elif any(word in q for word in ["خلاصه", "خلاصه کن", "نکات کلیدی"]):
-        return """📝 لطفاً متن خود را در کادر پایین بچسبانید تا برای شما:
-✅ خلاصه کوتاه و مفید آن را تهیه کنم
-✅ نکات و ایده‌های اصلی را جدا کنم
-✅ در صورت نیاز به صورت لیست مرتب شده ارائه دهم
-
-منتظر متن شما هستم! 📄"""
-
-    elif any(word in q for word in ["خرید", "لیست خرید", "وسایل"]):
-        return """🛒 **لیست خرید پیشنهادی یک هفته:**
-
-**خوراکی اصلی**
-- برنج، روغن، ماکارونی، حبوبات
-- تخم‌مرغ، شیر، پنیر، ماست
-
-**میوه و سبزی**
-- میوه‌های فصل، سیب، موز، پرتقال
-- سبزیجات تازه، گوجه، خیار، پیاز
-
-**نوشیدنی و پروتئین**
-- آب معدنی، چای، قهوه
-- گوشت یا مرغ، حبوبات پخته
-
-**بهداشت و خانه**
-- شامپو، صابون، دستمال کاغذی
-- مواد شوینده ضروری
-
-🔹 چیزی خاص مد نظرت هست اضافه کنم؟ بگو!"""
-
-    elif any(word in q for word in ["هدف", "اهداف", "برنامه‌ریزی", "موفقیت"]):
-        return """🎯 **مراحل دستیابی به اهداف:**
-
-۱. هدف را دقیق و قابل اندازه‌گیری بنویس
-   ❌ اشتباه: «موفق شوم»
-   ✅ درست: «تا سه ماه دیگر مهارت برنامه‌نویسی را یاد می‌گیرم»
-
-۲. آن را به گام‌های کوچیک تقسیم کن
-   - هر هفته یک موضوع
-   - هر روز ۳۰ دقیقه تمرین
-
-۳. برای هر گام زمان مشخص کن
-   - شروع: امروز
-   - بازبینی: هر یکشنبه شب
-
-۴. پیشرفت را ثبت کن
-   - دفترچه یا اپلیکیشن ساده
-   - هر هفته امتیاز بده به خودت
-
-🔹 اهداف امسال تو چیه؟ بگو تا با هم برنامه‌ریزی کنیم!"""
-
-    else:
-        return f"""سلام! 👋 من **futureQuant** هستم.
-
-می‌توانم در این موارد کمکت کنم:
-✅ برنامه‌ریزی روزانه و زمانی
-✅ نوشتن نامه، پیام و متن‌های مختلف
-✅ خلاصه‌سازی و مرتب‌سازی مطالب
-✅ تهیه لیست خرید و برنامه سفر
-✅ تعیین هدف و مسیر پیشرفت
-
-چطور می‌توانم کمکت کنم؟ 🚀"""
+from browser_agent import BrowserAgent
+import threading
 
 # ---------------- تنظیمات صفحه ----------------
 st.set_page_config(
-    page_title="futureQuant | دستیار هوشمند",
-    page_icon="🚀",
+    page_title="futureQuant | ایجنت مرورگر",
+    page_icon="🌐",
     layout="wide"
 )
 
-# ---------------- هدر ----------------
-st.title("🚀 futureQuant")
-st.subheader("دستیار هوشمند برای برنامه‌ریزی، نوشتن و مدیریت کارهای روزمره")
+st.title("🌐 futureQuant — کنترل هوشمند مرورگر")
+st.subheader("بگو چه کاری می‌خوای از اینترنت انجام بدم!")
 st.divider()
 
-# ذخیره تاریخچه گفتگو
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+# نگهداری نمونه ایجنت در جلسه
+if "agent" not in st.session_state:
+    st.session_state.agent = None
+if "running" not in st.session_state:
+    st.session_state.running = False
 
-# نمایش تاریخچه
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+# دکمه‌های کنترل
+col1, col2, col3 = st.columns(3)
+with col1:
+    if st.button("🚀 باز کردن مرورگر", disabled=st.session_state.running):
+        st.session_state.agent = BrowserAgent()
+        st.session_state.agent.start()
+        st.session_state.running = True
+        st.success("✅ مرورگر باز شد! الان می‌تونی دستور بدی.")
 
-# منوی کناری
-with st.sidebar:
-    st.header("⚡ دسترسی سریع")
-    quick_prompt = None
-    
-    if st.button("📅 برنامه‌ریزی روز"):
-        quick_prompt = "برای من یک برنامه منظم و عملیاتی برای یک روز کامل بنویس، شامل زمان‌بندی کارها، استراحت و مطالعه."
-    elif st.button("✍️ نوشتن متن"):
-        quick_prompt = "یک الگوی آماده برای نوشتن نامه یا پیام رسمی برایم بنویس."
-    elif st.button("📝 خلاصه‌سازی متن"):
-        quick_prompt = "من یک متن می‌دهم، لطفاً آن را خلاصه کن و نکات کلیدی را جدا کن."
-    elif st.button("🛒 لیست خرید"):
-        quick_prompt = "یک لیست خرید کامل و دسته‌بندی شده برای یک هفته برایم تهیه کن."
-    elif st.button("🎯 برنامه‌ریزی اهداف"):
-        quick_prompt = "راهنمایی کن که اهداف سالانه را چگونه بنویسم و به گام‌های کوچیک روزمره تقسیم کنم."
+with col2:
+    if st.button("❌ بستن مرورگر", disabled=not st.session_state.running):
+        if st.session_state.agent:
+            st.session_state.agent.close()
+        st.session_state.agent = None
+        st.session_state.running = False
+        st.info("مرورگر بسته شد.")
 
-# دریافت ورودی از کاربر
-user_input = st.chat_input("پیام خود را بنویسید...")
-prompt = user_input or quick_prompt
-
-if prompt:
-    # نمایش پیام کاربر
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
-
-    # پاسخ دستیار
-    with st.chat_message("assistant"):
-        with st.spinner("در حال پردازش..."):
-            response = generate_reply(prompt)
-            st.markdown(response)
-            st.session_state.messages.append({"role": "assistant", "content": response})
+with col3:
+    st.info(f"وضعیت: {'فعال ✅' if st.session_state.running else 'غیرفعال ❌'}")
 
 st.divider()
-st.caption("futureQuant © ۲۰۲۶ | سیستم هوشمند برنامه‌ریزی و مدیریت")
+
+# دستورات آماده
+st.header("📋 دستورات نمونه")
+ex1 = "برو تلگرام رو باز کن"
+ex2 = "برو گوگل رو باز کن"
+ex3 = "به دوستم بگو امشب تماس می‌گیرم"
+ex4 = "برو جی‌میل رو باز کن"
+
+col_a, col_b, col_c, col_d = st.columns(4)
+with col_a: st.code(ex1)
+with col_b: st.code(ex2)
+with col_c: st.code(ex3)
+with col_d: st.code(ex4)
+
+# دریافت دستور
+st.divider()
+command = st.text_input("✏️ دستورت رو بنویس:", placeholder="مثال: به علی بگو فردا قرارمون یادت نره")
+
+if st.button("▶️ اجرا کن", disabled=not st.session_state.running):
+    if command:
+        with st.spinner("در حال انجام دادن... پنجره مرورگر رو ببین 👀"):
+            result = st.session_state.agent.do_task(command)
+            st.success(result)
+    else:
+        st.warning("اول دستورت رو بنویس!")
+
+# هشدار امنیتی
+st.divider()
+st.warning("""
+⚠️ نکته مهم:
+- این برنامه فقط روی کامپیوتر خودت اجرا میشه
+- برای اولین ورود به تلگرام، خودت وارد حساب شو — برنامه رمز رو نمی‌بیند و ذخیره نمی‌کند
+- استفاده خودکار از حساب کاربری تلگرام ممکنه منجر به محدودیت حساب بشه
+- این ابزار فقط برای استفاده شخصی و غیرحجومی طراحی شده
+""")
